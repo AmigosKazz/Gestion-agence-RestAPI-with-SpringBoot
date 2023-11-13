@@ -23,4 +23,12 @@ public class UtilisateurService {
     public List<Utilisateur> listUtilisateur() {
         return utilisateurRepository.findAll();
     }
+
+    public Utilisateur getUtilisateurById(Long id_utilisateur) {
+        return utilisateurRepository.findById(id_utilisateur).orElse(null);
+    }
+
+    public void supprimerUtilisateur(Long idUtilisateur) {
+        utilisateurRepository.deleteById(idUtilisateur);
+    }
 }
