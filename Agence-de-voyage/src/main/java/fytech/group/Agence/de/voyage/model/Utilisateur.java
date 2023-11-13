@@ -38,13 +38,13 @@ public class Utilisateur implements Serializable {
             name = "role_utilisateur",
             nullable = false
     )
-    private Role role_utilisateur;
+    private String role_utilisateur;
 
 
     public Utilisateur() {
     }
 
-    public Utilisateur(String nom_utilisateur, String email_utilisateur, String password_utilisateur, Role role_utilisateur) {
+    public Utilisateur(String nom_utilisateur, String email_utilisateur, String password_utilisateur, String role_utilisateur) {
         this.nom_utilisateur = nom_utilisateur;
         this.email_utilisateur = email_utilisateur;
         this.password_utilisateur = password_utilisateur;
@@ -83,11 +83,11 @@ public class Utilisateur implements Serializable {
         this.password_utilisateur = password_utilisateur;
     }
 
-    public Role getRole_utilisateur() {
+    public String getRole_utilisateur() {
         return role_utilisateur;
     }
 
-    public void setRole_utilisateur(Role role_utilisateur) {
+    public void setRole_utilisateur(String role_utilisateur) {
         this.role_utilisateur = role_utilisateur;
     }
 
