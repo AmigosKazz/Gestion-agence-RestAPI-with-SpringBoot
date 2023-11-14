@@ -21,6 +21,8 @@ public class Reservation implements Serializable{
     @ManyToOne
     @JoinColumn(name = "id_destination")
     private Destination destination;
+
+
     @ManyToOne
     @JoinColumn(name = "id_agence")
     private Agence agence;

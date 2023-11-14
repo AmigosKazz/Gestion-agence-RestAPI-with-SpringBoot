@@ -16,12 +16,19 @@ public class ReservationService {
         this.reservationRepository = reservationRepository;
     }
 
-
     public List<Reservation> listeReservation() {
         return reservationRepository.findAll();
     }
 
     public Reservation getReservationById(Long id_reservation) {
         return reservationRepository.findById(id_reservation).orElse(null);
+    }
+
+    public Reservation ajouterReservation(Reservation reservation) {
+        return reservationRepository.save(reservation);
+    }
+
+    public void deleteReservation(Long id_reservation) {
+        reservationRepository.deleteById(id_reservation);
     }
 }

@@ -5,10 +5,7 @@ import fytech.group.Agence.de.voyage.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,4 +34,17 @@ public class ReservationController {
         }
 
     }
+
+    @PostMapping("/ajouterReservation")
+    public ResponseEntity<Reservation> ajouterReservation(@RequestBody Reservation reservation) {
+        Reservation newReservation = reservationService.ajouterReservation(reservation);
+        return new ResponseEntity<>(newReservation, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/deleteReservation/{id}")
+    public ResponseEntity<Void> deleteReservation(@PathVariable(value = "id") Long id_reservation) {
+        reservationService.deleteReservation(id_reservation);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
