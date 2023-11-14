@@ -1,6 +1,7 @@
 package fytech.group.Agence.de.voyage.service;
 
 import fytech.group.Agence.de.voyage.model.Reservation;
+import fytech.group.Agence.de.voyage.model.StatusReservation;
 import fytech.group.Agence.de.voyage.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,4 +32,25 @@ public class ReservationService {
     public void deleteReservation(Long id_reservation) {
         reservationRepository.deleteById(id_reservation);
     }
+
+    public Reservation confirmerReservation(Long idReservation) {
+        Reservation reservation = reservationRepository.findById(idReservation).orElse(null);
+        if (reservation != null) {
+            reservation.setStatus(StatusReservation.CONFIRMEE);
+            return reservationRepository.save(reservation);
+        } else {
+            return null;
+        }
+    }
+
+    public Reservation rejeterReservation(Long idReservation) {
+        Reservation reservation = reservationRepository.findById(idReservation).orElse(null);
+        if (reservation != null) {
+            reservation.setStatus(StatusReservation.REJETEE);
+            return reservationRepository.save(reservation);
+        } else {
+            return null;
+        }
+    }
+
 }

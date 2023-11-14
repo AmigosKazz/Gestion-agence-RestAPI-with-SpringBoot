@@ -47,4 +47,26 @@ public class ReservationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    //L'agence confirme ou rejette une demande de réservation.
+    @PostMapping("/confirmerReservation/{id}")
+    public ResponseEntity<Reservation> confirmerReservation(@PathVariable(value = "id") Long id_reservation) {
+        Reservation reservation = reservationService.confirmerReservation(id_reservation);
+        if (reservation != null) {
+            return new ResponseEntity<>(reservation, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @PostMapping("/rejeterReservation/{id}")
+    public ResponseEntity<Reservation> rejeterReservation(@PathVariable(value = "id") Long id_reservation) {
+        Reservation reservation = reservationService.rejeterReservation(id_reservation);
+        if (reservation != null) {
+            return new ResponseEntity<>(reservation, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+
 }

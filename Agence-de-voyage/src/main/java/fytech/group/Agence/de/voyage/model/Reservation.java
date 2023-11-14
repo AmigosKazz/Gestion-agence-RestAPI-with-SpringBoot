@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Date;
+
 @Entity
 public class Reservation implements Serializable{
     @Id
@@ -21,7 +22,6 @@ public class Reservation implements Serializable{
     @ManyToOne
     @JoinColumn(name = "id_destination")
     private Destination destination;
-
 
     @ManyToOne
     @JoinColumn(name = "id_agence")
@@ -45,16 +45,20 @@ public class Reservation implements Serializable{
     )
     private Integer nombre_personne;
 
+    private StatusReservation status = StatusReservation.EN_ATTENTE;
+
     public Reservation() {
     }
 
-    public Reservation( Date date_depart, Date date_retour,Utilisateur utilisateur, Destination destination, Agence agence, Integer nombre_personne) {
+    public Reservation( Date date_depart, Date date_retour,Utilisateur utilisateur,
+                        Destination destination, Agence agence, Integer nombre_personne, StatusReservation status) {
         this.utilisateur = utilisateur;
         this.destination = destination;
         this.agence = agence;
         this.date_depart = date_depart;
         this.date_retour = date_retour;
         this.nombre_personne = nombre_personne;
+        this.status = status;
     }
 
     public Long getId_reservation() {
@@ -113,6 +117,14 @@ public class Reservation implements Serializable{
         this.nombre_personne = nombre_personne;
     }
 
+    public StatusReservation getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusReservation status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Reservation{" +
@@ -123,6 +135,7 @@ public class Reservation implements Serializable{
                 ", date_depart=" + date_depart +
                 ", date_retour=" + date_retour +
                 ", nombre_personne=" + nombre_personne +
+                ", status=" + status +
                 '}';
     }
 }
