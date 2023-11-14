@@ -24,4 +24,9 @@ public class DestinationService {
     public Destination getDestinationById(Long id) {
         return destinationRepository.findById(id).orElse(null);
     }
+
+    public Destination ajouterDestination(Destination destination){
+        return destinationRepository.save(destination);
+    }
+
 }

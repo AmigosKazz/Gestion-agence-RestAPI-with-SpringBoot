@@ -4,9 +4,9 @@ import fytech.group.Agence.de.voyage.model.Destination;
 import fytech.group.Agence.de.voyage.repository.DestinationRepository;
 import fytech.group.Agence.de.voyage.service.DestinationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,14 +21,23 @@ public class DestinationController {
     }
 
     @GetMapping("/listeDestination")
-    public List<Destination> listeDestination(){
+    public List<Destination> listeDestination() {
         return destinationService.listeDestination();
     }
 
     @GetMapping("/listeDestination/{id}")
-    public Destination getDestinationById(Long id){
-        return destinationService.getDestinationById(id);
+    public ResponseEntity<Destination> getDestinationById(@PathVariable(value = "id") Long id_destination) {
+        Destination destination = destinationService.getDestinationById(id_destination);
+        if (destination != null) {
+            return new ResponseEntity<>(destination, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
+    @PostMapping("/ajouterDestination")
+    public Destination ajouterDestination(@RequestBody Destination destination) {
+        return destinationService.ajouterDestination(destination);
+    }
 
 }
