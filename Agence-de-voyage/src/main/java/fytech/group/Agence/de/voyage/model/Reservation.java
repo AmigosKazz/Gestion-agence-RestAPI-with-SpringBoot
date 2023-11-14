@@ -16,10 +16,13 @@ public class Reservation implements Serializable{
     private Long id_reservation;
 
     @ManyToOne
+    @JoinColumn(name = "id_utilisateur")
     private Utilisateur utilisateur;
     @ManyToOne
+    @JoinColumn(name = "id_destination")
     private Destination destination;
     @ManyToOne
+    @JoinColumn(name = "id_agence")
     private Agence agence;
 
     @Column(
