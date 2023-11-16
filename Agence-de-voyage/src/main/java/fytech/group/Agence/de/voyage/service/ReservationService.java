@@ -12,10 +12,14 @@ import java.util.List;
 public class ReservationService {
     private final ReservationRepository reservationRepository;
 
+
     @Autowired
     public ReservationService(ReservationRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
     }
+
+    @Autowired
+    private EmailService emailService;
 
     public List<Reservation> listeReservation() {
         return reservationRepository.findAll();
@@ -37,6 +41,17 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findById(idReservation).orElse(null);
         if (reservation != null) {
             reservation.setStatus(StatusReservation.CONFIRMEE);
+
+            //Sent email to the user
+            String to = reservation.getUtilisateur().getEmail_utilisateur();
+            String subject = "Confirmation de réservation";
+            String content = "Votre réservation a été confirmée";
+            try {
+                emailService.sendConfirmationEmail(to, subject, content);
+            } catch (Exception e) {
+                System.out.println("Erreur d'envoi de mail");
+            }
+
             return reservationRepository.save(reservation);
         } else {
             return null;

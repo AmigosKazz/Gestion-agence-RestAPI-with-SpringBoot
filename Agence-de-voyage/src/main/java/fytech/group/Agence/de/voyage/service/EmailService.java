@@ -17,11 +17,14 @@ public class EmailService {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message,true);
 
+        message.setFrom("kaznarahandrinarivo@gmail.com");
         helper.setTo(to);
         helper.setSubject(Object);
         helper.setText(Content,true);
 
         javaMailSender.send(message);
+
+        System.out.println("Email envoyé...");
 
     }
 
