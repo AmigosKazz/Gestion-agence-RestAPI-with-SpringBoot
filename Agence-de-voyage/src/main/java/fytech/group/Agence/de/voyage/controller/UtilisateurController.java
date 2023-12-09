@@ -39,10 +39,19 @@ public class UtilisateurController {
             return utilisateurService.ajouterUtilisateur(utilisateur);
         }
 
-
     @DeleteMapping("/supprimerUtilisateur/{id}")
         public ResponseEntity<Void> supprimerUtilisateur(@PathVariable("id") Long id_utilisateur){
             utilisateurService.supprimerUtilisateur(id_utilisateur);
             return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+    @PutMapping("/modifierUtilisateur/{id}")
+        public ResponseEntity<Utilisateur> modifierUtilisateur(@PathVariable("id") Long id_utilisateur, @RequestBody Utilisateur utilisateur){
+            Utilisateur utilisateur1 = utilisateurService.modifierUtilisateur(id_utilisateur, utilisateur);
+            if(utilisateur1 != null){
+                return new ResponseEntity<>(utilisateur1, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         }
 }
