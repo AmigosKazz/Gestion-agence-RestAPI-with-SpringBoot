@@ -1,6 +1,7 @@
 package fytech.group.Agence.de.voyage.controller;
 
 import fytech.group.Agence.de.voyage.model.Reservation;
+import fytech.group.Agence.de.voyage.model.Utilisateur;
 import fytech.group.Agence.de.voyage.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,13 +33,11 @@ public class ReservationController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
     }
 
     @PostMapping("/ajouterReservation")
-    public ResponseEntity<Reservation> ajouterReservation(@RequestBody Reservation reservation) {
-        Reservation newReservation = reservationService.ajouterReservation(reservation);
-        return new ResponseEntity<>(newReservation, HttpStatus.CREATED);
+    public Reservation ajouterReservation(@RequestBody Reservation reservation, @RequestBody Utilisateur utilisateur, @RequestBody Long destinationId) {
+        return reservationService.ajouterReservation(reservation, utilisateur, destinationId);
     }
 
     @DeleteMapping("/deleteReservation/{id}")

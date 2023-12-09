@@ -1,7 +1,10 @@
 package fytech.group.Agence.de.voyage.service;
 
+import fytech.group.Agence.de.voyage.model.Destination;
 import fytech.group.Agence.de.voyage.model.Reservation;
 import fytech.group.Agence.de.voyage.model.StatusReservation;
+import fytech.group.Agence.de.voyage.model.Utilisateur;
+import fytech.group.Agence.de.voyage.repository.DestinationRepository;
 import fytech.group.Agence.de.voyage.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,12 +17,15 @@ public class ReservationService {
 
 
     @Autowired
-    public ReservationService(ReservationRepository reservationRepository) {
+    public ReservationService(ReservationRepository reservationRepository,
+                              DestinationRepository destinationRepository) {
         this.reservationRepository = reservationRepository;
+        this.destinationRepository = destinationRepository;
     }
 
     @Autowired
     private EmailService emailService;
+    private final DestinationRepository destinationRepository;
 
     public List<Reservation> listeReservation() {
         return reservationRepository.findAll();
@@ -29,14 +35,15 @@ public class ReservationService {
         return reservationRepository.findById(id_reservation).orElse(null);
     }
 
-    public Reservation ajouterReservation(Reservation reservation) {
-        reservation.calculerPrixTotal();
+    public Reservation ajouterReservation(Reservation reservation, Utilisateur utilisateur, Long destinationId) {
         return reservationRepository.save(reservation);
     }
 
     public void deleteReservation(Long id_reservation) {
         reservationRepository.deleteById(id_reservation);
     }
+
+
 
     public Reservation confirmerReservation(Long idReservation) {
         Reservation reservation = reservationRepository.findById(idReservation).orElse(null);
