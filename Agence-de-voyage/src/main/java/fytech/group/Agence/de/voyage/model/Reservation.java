@@ -23,9 +23,6 @@ public class Reservation implements Serializable{
     @JoinColumn(name = "id_destination")
     private Destination destination;
 
-    @ManyToOne
-    @JoinColumn(name = "id_agence")
-    private Agence agence;
 
     @Column(
             name = "date_depart",
@@ -45,20 +42,41 @@ public class Reservation implements Serializable{
     )
     private Integer nombre_personne;
 
+    @Column(
+            name = "prix_total",
+            nullable = false
+    )
+    private Double prix_total;
+
+
     private StatusReservation status = StatusReservation.EN_ATTENTE;
 
     public Reservation() {
     }
 
     public Reservation( Date date_depart, Date date_retour,Utilisateur utilisateur,
-                        Destination destination, Agence agence, Integer nombre_personne, StatusReservation status) {
+                        Destination destination, Integer nombre_personne, StatusReservation status) {
         this.utilisateur = utilisateur;
         this.destination = destination;
-        this.agence = agence;
         this.date_depart = date_depart;
         this.date_retour = date_retour;
         this.nombre_personne = nombre_personne;
         this.status = status;
+    }
+
+    public void calculerPrixTotal() {
+    	if (this.destination != null) {
+    		this.prix_total = this.destination.getPrix_destination() * this.nombre_personne;
+    	}
+    }
+
+
+    public Double getPrix_total() {
+        return prix_total;
+    }
+
+    public void setPrix_total(Double prix_total) {
+        this.prix_total = prix_total;
     }
 
     public Long getId_reservation() {
@@ -83,14 +101,6 @@ public class Reservation implements Serializable{
 
     public void setDestination(Destination destination) {
         this.destination = destination;
-    }
-
-    public Agence getAgence() {
-        return agence;
-    }
-
-    public void setAgence(Agence agence) {
-        this.agence = agence;
     }
 
     public Date getDate_depart() {
@@ -131,7 +141,6 @@ public class Reservation implements Serializable{
                 "id_reservation=" + id_reservation +
                 ", utilisateur=" + utilisateur +
                 ", destination=" + destination +
-                ", agence=" + agence +
                 ", date_depart=" + date_depart +
                 ", date_retour=" + date_retour +
                 ", nombre_personne=" + nombre_personne +

@@ -30,6 +30,7 @@ public class ReservationService {
     }
 
     public Reservation ajouterReservation(Reservation reservation) {
+        reservation.calculerPrixTotal();
         return reservationRepository.save(reservation);
     }
 
@@ -67,7 +68,5 @@ public class ReservationService {
             return null;
         }
     }
-    
-
 
 }
