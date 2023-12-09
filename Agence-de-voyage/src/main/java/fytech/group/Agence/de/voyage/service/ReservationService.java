@@ -35,14 +35,10 @@ public class ReservationService {
         return reservationRepository.findById(id_reservation).orElse(null);
     }
 
-    public Reservation ajouterReservation(Reservation reservation, Utilisateur utilisateur, Long destinationId) {
-        return reservationRepository.save(reservation);
-    }
 
     public void deleteReservation(Long id_reservation) {
         reservationRepository.deleteById(id_reservation);
     }
-
 
 
     public Reservation confirmerReservation(Long idReservation) {
@@ -76,4 +72,14 @@ public class ReservationService {
         }
     }
 
+    public Reservation addReservation(Reservation reservation) {
+        Destination destination = destinationRepository.findById(reservation.getDestination().getId_destination()).orElse(null);
+        if (destination != null) {
+            reservation.setDestination(destination);
+            reservation.setStatus(StatusReservation.EN_ATTENTE);
+            return reservationRepository.save(reservation);
+        } else {
+            return null;
+        }
+    }
 }

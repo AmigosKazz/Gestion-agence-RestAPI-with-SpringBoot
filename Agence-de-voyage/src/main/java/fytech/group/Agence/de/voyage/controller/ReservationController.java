@@ -1,5 +1,6 @@
 package fytech.group.Agence.de.voyage.controller;
 
+import fytech.group.Agence.de.voyage.model.Destination;
 import fytech.group.Agence.de.voyage.model.Reservation;
 import fytech.group.Agence.de.voyage.model.Utilisateur;
 import fytech.group.Agence.de.voyage.service.ReservationService;
@@ -35,9 +36,28 @@ public class ReservationController {
         }
     }
 
-    @PostMapping("/ajouterReservation")
-    public Reservation ajouterReservation(@RequestBody Reservation reservation, @RequestBody Utilisateur utilisateur, @RequestBody Long destinationId) {
-        return reservationService.ajouterReservation(reservation, utilisateur, destinationId);
+    @PostMapping("/addReservation")
+    public ResponseEntity<Reservation> addReservation(@RequestBody Reservation reservation) {
+        try{
+            String email = reservation.getUtilisateur().getEmail_utilisateur();
+            String nom = reservation.getUtilisateur().getNom_utilisateur();
+
+            Destination destination = reservation.getDestination();
+            String nomDestination = destination.getNom_destination();
+            Double prixDestinationValue = destination.getPrix_destination();
+            double prixDestination = prixDestinationValue != null ? prixDestinationValue : 0.0;
+
+            // Calculate prix_total
+            double prixTotal = reservation.getNombre_personne() * prixDestination;
+            reservation.setPrix_total(prixTotal);
+
+            Reservation newReservation = reservationService.addReservation(reservation);
+            return new ResponseEntity<>(newReservation, HttpStatus.CREATED);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("/deleteReservation/{id}")
