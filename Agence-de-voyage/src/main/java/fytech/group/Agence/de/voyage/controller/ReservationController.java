@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/reservation")
+@RequestMapping("api/reservation")
 public class ReservationController {
     private final ReservationService reservationService;
 
@@ -76,14 +76,40 @@ public class ReservationController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @PostMapping("/rejeterReservation/{id}")
-    public ResponseEntity<Reservation> rejeterReservation(@PathVariable(value = "id") Long id_reservation) {
-        Reservation reservation = reservationService.rejeterReservation(id_reservation);
-        if (reservation != null) {
-            return new ResponseEntity<>(reservation, HttpStatus.OK);
+
+   @PutMapping("/updateReservation/{id}")
+public ResponseEntity<Reservation> updateReservation(@PathVariable(value = "id") Long id_reservation, @RequestBody Reservation reservationDetails) {
+    try {
+        Reservation existingReservation = reservationService.getReservationById(id_reservation);
+        if (existingReservation != null) {
+            existingReservation.setUtilisateur(reservationDetails.getUtilisateur());
+            existingReservation.setDestination(reservationDetails.getDestination());
+            existingReservation.setDate_depart(reservationDetails.getDate_depart());
+            existingReservation.setDate_retour(reservationDetails.getDate_retour());
+            existingReservation.setNombre_personne(reservationDetails.getNombre_personne());
+            existingReservation.calculerPrixTotal();
+
+            Reservation updatedReservation = reservationService.updateReservation(existingReservation);
+            return new ResponseEntity<>(updatedReservation, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    } catch (Exception e) {
+        System.err.println(e.getMessage());
+        e.printStackTrace();
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+}
+
+
+//    @PostMapping("/rejeterReservation/{id}")
+//    public ResponseEntity<Reservation> rejeterReservation(@PathVariable(value = "id") Long id_reservation) {
+//        Reservation reservation = reservationService.rejeterReservation(id_reservation);
+//        if (reservation != null) {
+//            return new ResponseEntity<>(reservation, HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 
 }

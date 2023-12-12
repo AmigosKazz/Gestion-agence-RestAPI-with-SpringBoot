@@ -19,14 +19,13 @@ public class Destination implements Serializable{
             name = "nom_destination",
             nullable = false
     )
-    private String nom_destination;
+        private String nom_destination;
 
     @Column(
             name = "prix_destination",
             nullable = false
     )
     private Double prix_destination;
-
 
     public Destination() {
     }

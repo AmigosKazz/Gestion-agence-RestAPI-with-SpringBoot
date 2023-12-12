@@ -2,8 +2,6 @@ package fytech.group.Agence.de.voyage.service;
 
 import fytech.group.Agence.de.voyage.model.Destination;
 import fytech.group.Agence.de.voyage.model.Reservation;
-import fytech.group.Agence.de.voyage.model.StatusReservation;
-import fytech.group.Agence.de.voyage.model.Utilisateur;
 import fytech.group.Agence.de.voyage.repository.DestinationRepository;
 import fytech.group.Agence.de.voyage.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +42,7 @@ public class ReservationService {
     public Reservation confirmerReservation(Long idReservation) {
         Reservation reservation = reservationRepository.findById(idReservation).orElse(null);
         if (reservation != null) {
-            reservation.setStatus(StatusReservation.CONFIRMEE);
+            //reservation.setStatus(StatusReservation.CONFIRMEE);
 
             //Sent email to the user
             String to = reservation.getUtilisateur().getEmail_utilisateur();
@@ -62,24 +60,26 @@ public class ReservationService {
         }
     }
 
-    public Reservation rejeterReservation(Long idReservation) {
-        Reservation reservation = reservationRepository.findById(idReservation).orElse(null);
-        if (reservation != null) {
-            reservation.setStatus(StatusReservation.REJETEE);
+//    public Reservation rejeterReservation(Long idReservation) {
+//        Reservation reservation = reservationRepository.findById(idReservation).orElse(null);
+//        if (reservation != null) {
+//            return reservationRepository.save(reservation);
+//        } else {
+//            return null;
+//        }
+//    }
+
+    public Reservation addReservation(Reservation reservation) {
+        Destination destination = destinationRepository.findById(reservation.getDestination().getId_destination()).orElse(null);
+        if (destination != null) {
+            reservation.setDestination(destination);
             return reservationRepository.save(reservation);
         } else {
             return null;
         }
     }
 
-    public Reservation addReservation(Reservation reservation) {
-        Destination destination = destinationRepository.findById(reservation.getDestination().getId_destination()).orElse(null);
-        if (destination != null) {
-            reservation.setDestination(destination);
-            reservation.setStatus(StatusReservation.EN_ATTENTE);
-            return reservationRepository.save(reservation);
-        } else {
-            return null;
-        }
+    public Reservation updateReservation(Reservation reservation) {
+        return reservationRepository.save(reservation);
     }
 }

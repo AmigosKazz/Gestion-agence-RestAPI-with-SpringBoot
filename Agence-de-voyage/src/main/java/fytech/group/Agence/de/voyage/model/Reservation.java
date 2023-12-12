@@ -7,6 +7,7 @@ import java.util.Date;
 
 @Entity
 public class Reservation implements Serializable{
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(
@@ -19,6 +20,7 @@ public class Reservation implements Serializable{
     @ManyToOne
     @JoinColumn(name = "id_utilisateur")
     private Utilisateur utilisateur;
+
     @ManyToOne
     @JoinColumn(name = "id_destination")
     private Destination destination;
@@ -49,19 +51,16 @@ public class Reservation implements Serializable{
     private Double prix_total;
 
 
-    private StatusReservation status = StatusReservation.EN_ATTENTE;
-
     public Reservation() {
     }
 
     public Reservation( Date date_depart, Date date_retour,Utilisateur utilisateur,
-                        Destination destination, Integer nombre_personne, StatusReservation status) {
+                        Destination destination, Integer nombre_personne) {
         this.utilisateur = utilisateur;
         this.destination = destination;
         this.date_depart = date_depart;
         this.date_retour = date_retour;
         this.nombre_personne = nombre_personne;
-        this.status = status;
     }
 
     public void calculerPrixTotal() {
@@ -127,13 +126,6 @@ public class Reservation implements Serializable{
         this.nombre_personne = nombre_personne;
     }
 
-    public StatusReservation getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusReservation status) {
-        this.status = status;
-    }
 
     @Override
     public String toString() {
@@ -144,7 +136,6 @@ public class Reservation implements Serializable{
                 ", date_depart=" + date_depart +
                 ", date_retour=" + date_retour +
                 ", nombre_personne=" + nombre_personne +
-                ", status=" + status +
                 '}';
     }
 }
