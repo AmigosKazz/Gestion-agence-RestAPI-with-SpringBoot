@@ -2,11 +2,13 @@ package fytech.group.Agence.de.voyage.controller;
 
 import fytech.group.Agence.de.voyage.model.Utilisateur;
 import fytech.group.Agence.de.voyage.service.UtilisateurService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import java.util.List;
 
 @CrossOrigin
@@ -55,4 +57,38 @@ public class UtilisateurController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         }
+
+    @PostMapping("/login")
+        public ResponseEntity<Utilisateur> login(@RequestBody Utilisateur utilisateur){
+            Utilisateur utilisateur1 = utilisateurService.login(utilisateur.getNom_utilisateur(), utilisateur.getPassword_utilisateur());
+            if(utilisateur1 != null){
+                ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+                HttpSession session = attr.getRequest().getSession(true);
+                session.setAttribute("utilisateur", utilisateur1);
+
+                return new ResponseEntity<>(utilisateur1, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+
+    @PostMapping("/logout")
+        public ResponseEntity<Void> logout(){
+            ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+            HttpSession session = attr.getRequest().getSession(true);
+            session.removeAttribute("utilisateur");
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+    @GetMapping("/agenceOnlyRoute")
+    public ResponseEntity<Void> agenceOnlyRoute(){
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpSession session = attr.getRequest().getSession(true);
+        Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
+        if(utilisateur != null && utilisateur.getRole_utilisateur().equals("agence")){
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
 }

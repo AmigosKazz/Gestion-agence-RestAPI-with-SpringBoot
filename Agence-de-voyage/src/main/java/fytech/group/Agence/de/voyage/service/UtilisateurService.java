@@ -48,4 +48,7 @@ public class UtilisateurService {
         return updateUtilsateur;
     }
 
+    public Utilisateur login(String nom_utilisateur, String password_utilisateur) {
+        return utilisateurRepository.findUtilisateurByNomUtilisateurAndPasswordUtilisateur(nom_utilisateur, password_utilisateur);
+    }
 }
