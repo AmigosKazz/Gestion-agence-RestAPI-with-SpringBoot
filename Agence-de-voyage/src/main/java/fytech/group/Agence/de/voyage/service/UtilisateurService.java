@@ -31,6 +31,11 @@ public class UtilisateurService {
         return utilisateurRepository.findById(id_utilisateur).orElse(null);
     }
 
+    public Utilisateur getUtilisateurByUserName(String nom_utilisateur) {
+        return utilisateurRepository.findByNomUtilisateur(nom_utilisateur);
+    }
+
+
     public void supprimerUtilisateur(Long idUtilisateur) {
         utilisateurRepository.deleteById(idUtilisateur);
     }
@@ -46,6 +51,10 @@ public class UtilisateurService {
 
         Utilisateur updateUtilsateur = utilisateurRepository.save(utilisateur1);
         return updateUtilsateur;
+    }
+
+    public boolean hasPermission(Utilisateur utilisateur, String requiredRole) {
+        return utilisateur.getRole_utilisateur().equals(requiredRole);
     }
 
 }
