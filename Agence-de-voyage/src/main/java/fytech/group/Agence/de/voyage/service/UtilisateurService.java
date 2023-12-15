@@ -48,4 +48,19 @@ public class UtilisateurService {
         return updateUtilsateur;
     }
 
+    public boolean verifierUtilisateur(Utilisateur utilisateur) {
+        List<Utilisateur> utilisateurs = utilisateurRepository.findAll();
+        for (Utilisateur u : utilisateurs) {
+            if (u.getNom_utilisateur().equals(utilisateur.getNom_utilisateur())
+                    && u.getPassword_utilisateur().equals(utilisateur.getPassword_utilisateur())
+                    && u.getRole_utilisateur().equals(utilisateur.getRole_utilisateur())) {
+                return true;
+            }
+
+        }
+
+        return false;
+    }
+
 }
+

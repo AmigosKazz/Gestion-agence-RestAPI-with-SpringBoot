@@ -2,7 +2,6 @@ package fytech.group.Agence.de.voyage.model;
 
 import jakarta.persistence.*;
 
-import javax.management.relation.Role;
 import java.io.Serializable;
 
 @Entity

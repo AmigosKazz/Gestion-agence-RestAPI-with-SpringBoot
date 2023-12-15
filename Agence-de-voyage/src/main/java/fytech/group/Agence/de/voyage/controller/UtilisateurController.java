@@ -11,7 +11,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(path = "api/utilisateur")
+    @RequestMapping(path = "api/utilisateur")
 public class UtilisateurController {
     private final UtilisateurService utilisateurService;
 
@@ -55,4 +55,15 @@ public class UtilisateurController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         }
+
+
+    @PostMapping("/login")
+    public ResponseEntity<Void> login(@RequestBody Utilisateur utilisateur) {
+        if (utilisateurService.verifierUtilisateur(utilisateur)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
 }
