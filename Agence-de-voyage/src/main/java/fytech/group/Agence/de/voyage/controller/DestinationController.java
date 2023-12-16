@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/destination")
+@RequestMapping("api/destination")
 public class DestinationController {
     private final DestinationService destinationService;
 
@@ -38,6 +38,16 @@ public class DestinationController {
     @PostMapping("/ajouterDestination")
     public Destination ajouterDestination(@RequestBody Destination destination) {
         return destinationService.ajouterDestination(destination);
+    }
+
+    @PutMapping("/modifierDestination/{id}")
+    public ResponseEntity<Destination> updateDestination(@PathVariable(value = "id") Long id_destination, @RequestBody Destination destination) {
+        Destination updatedDestination = destinationService.updateDestination(id_destination, destination);
+        if (updatedDestination != null) {
+            return new ResponseEntity<>(updatedDestination, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 }

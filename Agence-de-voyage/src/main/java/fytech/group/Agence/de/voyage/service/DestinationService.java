@@ -29,4 +29,16 @@ public class DestinationService {
         return destinationRepository.save(destination);
     }
 
+    public Destination updateDestination(Long id_destination, Destination updateDestination) {
+        Destination destination = destinationRepository.findById(id_destination).orElse(null);
+        if (destination != null) {
+            destination.setNom_destination(updateDestination.getNom_destination());
+            destination.setPrix_destination(updateDestination.getPrix_destination());
+
+            return destinationRepository.save(destination);
+        }
+
+        return null;
+    }
+
 }
