@@ -50,4 +50,11 @@ public class DestinationController {
         }
     }
 
+    @DeleteMapping("/supprimerDestination/{id}")
+    public ResponseEntity<Void> supprimerDestination(@PathVariable("id") Long id_destination){
+        destinationService.supprimerDestination(id_destination);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 }

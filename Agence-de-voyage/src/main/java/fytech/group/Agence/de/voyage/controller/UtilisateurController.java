@@ -44,7 +44,7 @@ public class UtilisateurController {
         public ResponseEntity<Void> supprimerUtilisateur(@PathVariable("id") Long id_utilisateur){
             utilisateurService.supprimerUtilisateur(id_utilisateur);
             return new ResponseEntity<>(HttpStatus.OK);
-        }
+    }
 
     @PutMapping("/modifierUtilisateur/{id}")
         public ResponseEntity<Utilisateur> modifierUtilisateur(@PathVariable("id") Long id_utilisateur, @RequestBody Utilisateur utilisateur){

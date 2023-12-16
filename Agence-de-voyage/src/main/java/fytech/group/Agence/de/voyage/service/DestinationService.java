@@ -41,4 +41,9 @@ public class DestinationService {
         return null;
     }
 
+    public void supprimerDestination(Long idDestination) {
+        destinationRepository.deleteById(idDestination);
+    }
+
+
 }
