@@ -17,7 +17,7 @@ public class Destination implements Serializable{
 
     @Column(
             name = "nom_destination",
-            nullable = false
+            updatable = true
     )
         private String nom_destination;
 

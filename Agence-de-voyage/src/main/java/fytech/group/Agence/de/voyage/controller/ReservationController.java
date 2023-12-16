@@ -37,28 +37,34 @@ public class ReservationController {
     }
 
     @PostMapping("/addReservation")
-    public ResponseEntity<Reservation> addReservation(@RequestBody Reservation reservation) {
-        try{
-            String email = reservation.getUtilisateur().getEmail_utilisateur();
-            String nom = reservation.getUtilisateur().getNom_utilisateur();
-
-            Destination destination = reservation.getDestination();
-            String nomDestination = destination.getNom_destination();
-            Double prixDestinationValue = destination.getPrix_destination();
-            double prixDestination = prixDestinationValue != null ? prixDestinationValue : 0.0;
-
-            // Calculate prix_total
-            double prixTotal = reservation.getNombre_personne() * prixDestination;
-            reservation.setPrix_total(prixTotal);
-
-            Reservation newReservation = reservationService.addReservation(reservation);
-            return new ResponseEntity<>(newReservation, HttpStatus.CREATED);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+public ResponseEntity<Reservation> addReservation(@RequestBody Reservation reservation) {
+    try{
+        Utilisateur utilisateur = reservation.getUtilisateur();
+        Destination destination = reservation.getDestination();
+        if (utilisateur.getId_utilisateur() == null || destination.getId_destination() == null) {
+            // Handle null ID appropriately
+            // Here, we return an error response
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        String email = utilisateur.getEmail_utilisateur();
+        String nom = utilisateur.getNom_utilisateur();
+        String nomDestination = destination.getNom_destination();
+        Double prixDestinationValue = destination.getPrix_destination();
+        double prixDestination = prixDestinationValue != null ? prixDestinationValue : 0.0;
+
+        // Calculate prix_total
+        double prixTotal = reservation.getNombre_personne() * prixDestination;
+        reservation.setPrix_total(prixTotal);
+
+        Reservation newReservation = reservationService.addReservation(reservation);
+        return new ResponseEntity<>(newReservation, HttpStatus.CREATED);
+    } catch (Exception e) {
+        System.err.println(e.getMessage());
+        e.printStackTrace();
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+}
 
     @DeleteMapping("/deleteReservation/{id}")
     public ResponseEntity<Void> deleteReservation(@PathVariable(value = "id") Long id_reservation) {
@@ -77,29 +83,29 @@ public class ReservationController {
         }
     }
 
-   @PutMapping("/updateReservation/{id}")
-public ResponseEntity<Reservation> updateReservation(@PathVariable(value = "id") Long id_reservation, @RequestBody Reservation reservationDetails) {
-    try {
-        Reservation existingReservation = reservationService.getReservationById(id_reservation);
-        if (existingReservation != null) {
-            existingReservation.setUtilisateur(reservationDetails.getUtilisateur());
-            existingReservation.setDestination(reservationDetails.getDestination());
-            existingReservation.setDate_depart(reservationDetails.getDate_depart());
-            existingReservation.setDate_retour(reservationDetails.getDate_retour());
-            existingReservation.setNombre_personne(reservationDetails.getNombre_personne());
-            existingReservation.calculerPrixTotal();
+    @PutMapping("/updateReservation/{id}")
+        public ResponseEntity<Reservation> updateReservation(@PathVariable(value = "id") Long id_reservation, @RequestBody Reservation reservationDetails) {
+            try {
+                Reservation existingReservation = reservationService.getReservationById(id_reservation);
+                if (existingReservation != null) {
+                    existingReservation.setUtilisateur(reservationDetails.getUtilisateur());
+                    existingReservation.setDestination(reservationDetails.getDestination());
+                    existingReservation.setDate_depart(reservationDetails.getDate_depart());
+                    existingReservation.setDate_retour(reservationDetails.getDate_retour());
+                    existingReservation.setNombre_personne(reservationDetails.getNombre_personne());
+                    existingReservation.calculerPrixTotal();
 
-            Reservation updatedReservation = reservationService.updateReservation(existingReservation);
-            return new ResponseEntity<>(updatedReservation, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                    Reservation updatedReservation = reservationService.updateReservation(existingReservation);
+                    return new ResponseEntity<>(updatedReservation, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
-    } catch (Exception e) {
-        System.err.println(e.getMessage());
-        e.printStackTrace();
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-}
 
 
 //    @PostMapping("/rejeterReservation/{id}")

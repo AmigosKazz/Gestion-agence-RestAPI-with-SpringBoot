@@ -12,8 +12,7 @@ public class Reservation implements Serializable{
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(
             name = "id_reservation",
-            updatable = false,
-            nullable = false
+            updatable = true
     )
     private Long id_reservation;
 
