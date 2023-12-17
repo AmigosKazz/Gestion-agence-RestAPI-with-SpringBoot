@@ -1,8 +1,6 @@
 package fytech.group.Agence.de.voyage.service;
 
-import fytech.group.Agence.de.voyage.model.Destination;
-import fytech.group.Agence.de.voyage.model.Reservation;
-import fytech.group.Agence.de.voyage.repository.DestinationRepository;
+import fytech.group.Agence.de.voyage.model.Reserve;
 import fytech.group.Agence.de.voyage.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,21 +13,16 @@ public class ReservationService {
 
 
     @Autowired
-    public ReservationService(ReservationRepository reservationRepository,
-                              DestinationRepository destinationRepository) {
+    public ReservationService(ReservationRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
-        this.destinationRepository = destinationRepository;
+
     }
 
-    @Autowired
-    private EmailService emailService;
-    private final DestinationRepository destinationRepository;
-
-    public List<Reservation> listeReservation() {
+    public List<Reserve> listeReservation() {
         return reservationRepository.findAll();
     }
 
-    public Reservation getReservationById(Long id_reservation) {
+    public Reserve getReservationById(Long id_reservation) {
         return reservationRepository.findById(id_reservation).orElse(null);
     }
 
@@ -39,47 +32,7 @@ public class ReservationService {
     }
 
 
-    public Reservation confirmerReservation(Long idReservation) {
-        Reservation reservation = reservationRepository.findById(idReservation).orElse(null);
-        if (reservation != null) {
-            //reservation.setStatus(StatusReservation.CONFIRMEE);
-
-            //Sent email to the user
-            String to = reservation.getUtilisateur().getEmail_utilisateur();
-            String subject = "Confirmation de réservation";
-            String content = "Votre réservation a été confirmée";
-            try {
-                emailService.sendConfirmationEmail(to, subject, content);
-            } catch (Exception e) {
-                System.out.println("Erreur d'envoi de mail");
-            }
-
-            return reservationRepository.save(reservation);
-        } else {
-            return null;
-        }
-    }
-
-//    public Reservation rejeterReservation(Long idReservation) {
-//        Reservation reservation = reservationRepository.findById(idReservation).orElse(null);
-//        if (reservation != null) {
-//            return reservationRepository.save(reservation);
-//        } else {
-//            return null;
-//        }
-//    }
-
-    public Reservation addReservation(Reservation reservation) {
-        Destination destination = destinationRepository.findById(reservation.getDestination().getId_destination()).orElse(null);
-        if (destination != null) {
-            reservation.setDestination(destination);
-            return reservationRepository.save(reservation);
-        } else {
-            return null;
-        }
-    }
-
-    public Reservation updateReservation(Reservation reservation) {
-        return reservationRepository.save(reservation);
+    public Reserve ajouterReservation(Reserve reserve) {
+        return reservationRepository.save(reserve);
     }
 }

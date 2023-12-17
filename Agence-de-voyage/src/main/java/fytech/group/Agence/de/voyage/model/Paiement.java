@@ -14,8 +14,6 @@ public class Paiement implements Serializable {
             nullable = false
     )
     private Long id_paiement;
-    @ManyToOne
-    private Reservation reservation;
 
     @Column(
             name = "numero_telephone",
@@ -32,8 +30,7 @@ public class Paiement implements Serializable {
     public Paiement() {
     }
 
-    public Paiement(Reservation reservation, String numero_telephone, Double montant_paiement) {
-        this.reservation = reservation;
+    public Paiement(String numero_telephone, Double montant_paiement) {
         this.numero_telephone = numero_telephone;
         this.montant_paiement = montant_paiement;
     }
@@ -46,13 +43,8 @@ public class Paiement implements Serializable {
         this.id_paiement = id_paiement;
     }
 
-    public Reservation getReservation() {
-        return reservation;
-    }
 
-    public void setReservation(Reservation reservation) {
-        this.reservation = reservation;
-    }
+
 
     public String getNumero_telephone() {
         return numero_telephone;
@@ -74,7 +66,6 @@ public class Paiement implements Serializable {
     public String toString() {
         return "Paiement{" +
                 "id_paiement=" + id_paiement +
-                ", reservation=" + reservation +
                 ", numero_telephone='" + numero_telephone + '\'' +
                 ", montant_paiement=" + montant_paiement +
                 '}';
