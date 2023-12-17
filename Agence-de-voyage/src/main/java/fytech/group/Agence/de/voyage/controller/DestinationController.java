@@ -56,5 +56,4 @@ public class DestinationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
 }
