@@ -45,5 +45,4 @@ public class DestinationService {
         destinationRepository.deleteById(idDestination);
     }
 
-
 }

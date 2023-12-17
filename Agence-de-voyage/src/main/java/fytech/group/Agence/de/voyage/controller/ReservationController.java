@@ -37,34 +37,34 @@ public class ReservationController {
     }
 
     @PostMapping("/addReservation")
-public ResponseEntity<Reservation> addReservation(@RequestBody Reservation reservation) {
-    try{
-        Utilisateur utilisateur = reservation.getUtilisateur();
-        Destination destination = reservation.getDestination();
-        if (utilisateur.getId_utilisateur() == null || destination.getId_destination() == null) {
-            // Handle null ID appropriately
-            // Here, we return an error response
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Reservation> addReservation(@RequestBody Reservation reservation) {
+        try{
+            Utilisateur utilisateur = reservation.getUtilisateur();
+            Destination destination = reservation.getDestination();
+            if (utilisateur == null || utilisateur.getId_utilisateur() == null) {
+                // Handle null Utilisateur appropriately
+                // Here, we return an error response
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            String email = utilisateur.getEmail_utilisateur();
+            String nom = utilisateur.getNom_utilisateur();
+            String nomDestination = destination.getNom_destination();
+            Double prixDestinationValue = destination.getPrix_destination();
+            double prixDestination = prixDestinationValue != null ? prixDestinationValue : 0.0;
+
+            // Calculate prix_total
+            double prixTotal = reservation.getNombre_personne() * prixDestination;
+            reservation.setPrix_total(prixTotal);
+
+            Reservation newReservation = reservationService.addReservation(reservation);
+            return new ResponseEntity<>(newReservation, HttpStatus.CREATED);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        String email = utilisateur.getEmail_utilisateur();
-        String nom = utilisateur.getNom_utilisateur();
-        String nomDestination = destination.getNom_destination();
-        Double prixDestinationValue = destination.getPrix_destination();
-        double prixDestination = prixDestinationValue != null ? prixDestinationValue : 0.0;
-
-        // Calculate prix_total
-        double prixTotal = reservation.getNombre_personne() * prixDestination;
-        reservation.setPrix_total(prixTotal);
-
-        Reservation newReservation = reservationService.addReservation(reservation);
-        return new ResponseEntity<>(newReservation, HttpStatus.CREATED);
-    } catch (Exception e) {
-        System.err.println(e.getMessage());
-        e.printStackTrace();
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-}
 
     @DeleteMapping("/deleteReservation/{id}")
     public ResponseEntity<Void> deleteReservation(@PathVariable(value = "id") Long id_reservation) {
