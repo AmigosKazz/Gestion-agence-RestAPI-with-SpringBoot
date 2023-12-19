@@ -35,4 +35,10 @@ public class ReservationService {
     public Reserve ajouterReservation(Reserve reserve) {
         return reservationRepository.save(reserve);
     }
+
+    public List<Reserve> getReservationsByDestination(String destination) {
+        return reservationRepository.findByDestinationStartingWithIgnoreCase(destination);
+    }
+
+
 }
