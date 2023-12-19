@@ -1,7 +1,9 @@
 package fytech.group.Agence.de.voyage.controller;
 
 import fytech.group.Agence.de.voyage.model.Reserve;
+import fytech.group.Agence.de.voyage.service.EmailService;
 import fytech.group.Agence.de.voyage.service.ReservationService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +15,13 @@ import java.util.List;
 @RequestMapping("api/reserve")
 public class ReservationController {
     private final ReservationService reservationService;
+    private final EmailService emailService;
+
 
     @Autowired
-    public ReservationController(ReservationService reservationService) {
+    public ReservationController(ReservationService reservationService, EmailService emailService) {
         this.reservationService = reservationService;
+        this.emailService = emailService;
     }
 
     @GetMapping("/listeReservation")
@@ -47,9 +52,26 @@ public class ReservationController {
     }
 
     @DeleteMapping("/deleteReservation/{id}")
-    public ResponseEntity<Void> deleteReservation(@PathVariable(value = "id") Long id_reservation) {
+    public ResponseEntity<String> deleteReservation(@PathVariable(value = "id") Long id_reservation) {
         reservationService.deleteReservation(id_reservation);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("Reservation deleted successfully", HttpStatus.OK);
+    }
+
+    @PostMapping("/confirmerReservation/{id}")
+    public ResponseEntity<Void> confirmerReservation(@PathVariable(value = "id") Long id_reservation) {
+        Reserve reserve = reservationService.getReservationById(id_reservation);
+        if (reserve != null) {
+            try {
+                emailService.sendConfirmationEmail(reserve);
+                reservationService.deleteReservation(id_reservation);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 }

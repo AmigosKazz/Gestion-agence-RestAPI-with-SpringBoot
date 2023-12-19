@@ -40,5 +40,4 @@ public class ReservationService {
         return reservationRepository.findByDestinationStartingWithIgnoreCase(destination);
     }
 
-
 }
