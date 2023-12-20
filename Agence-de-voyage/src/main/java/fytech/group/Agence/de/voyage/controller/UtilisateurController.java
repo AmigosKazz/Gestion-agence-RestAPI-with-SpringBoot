@@ -2,6 +2,7 @@ package fytech.group.Agence.de.voyage.controller;
 
 import fytech.group.Agence.de.voyage.model.Utilisateur;
 import fytech.group.Agence.de.voyage.service.UtilisateurService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -65,5 +66,6 @@ public class UtilisateurController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
+
 
 }
