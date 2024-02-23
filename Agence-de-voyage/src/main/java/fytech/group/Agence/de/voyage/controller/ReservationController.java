@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/reserve")
+@RequestMapping("api/v1/reserve")
 public class ReservationController {
     private final ReservationService reservationService;
     private final EmailService emailService;
@@ -39,13 +39,11 @@ public class ReservationController {
         }
     }
 
-    // recherche par id_client
     @GetMapping("/recherche/{destination}")
     public List<Reserve> getReservationByDestination(@PathVariable(value = "destination") String destination) {
         return reservationService.getReservationsByDestination(destination);
     }
 
-    //ajout reserve
     @PostMapping("/ajouterReservation")
     public Reserve ajouterReservation(@RequestBody Reserve reserve) {
         return reservationService.ajouterReservation(reserve);
